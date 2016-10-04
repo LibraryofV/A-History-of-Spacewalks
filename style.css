@@ -1,0 +1,60 @@
+html body {
+    margin: 0;
+    padding: 0;
+}
+body {
+  background-color: #444;
+}
+h1 {
+    font-family: 'Oleo Script', cursive;
+    font-size: 50pt;
+    font-weight: 100;
+    z-index: 0;
+    transition: font-size 1s ease;
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px #333;
+}
+.disableScroll {
+    overflow: hidden;
+}
+.splash {
+    z-index: 2;
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+    background-image: url('resources/spacewalk-min.jpg');
+    background-size: cover;
+    border-bottom: 2px solid #DCDEE4;
+}
+.splash-header {
+    z-index: 1;
+    position: absolute;
+    top: calc((100vh / 2) - 95px);
+    width: 100%;
+    transition: top 1s ease;
+    text-align: center;
+    background-color: rgba(51, 51, 51, .8);
+}
+.main {
+    max-width: 1000px;
+    margin: auto;
+    background-color: #FFF;
+    box-shadow: 0 0 10px #000;
+}
+@media screen and (max-width: 900px) {
+    h1 {
+        font-size: 30pt;
+    }
+    .splash-header {
+        top: calc((100vh / 2) - 57px);
+    }
+}
+@media screen and (max-width: 500px) {
+    h1 {
+        font-size: 20pt;
+    }
+    .splash-header {
+        top: calc((100vh / 2) - 38px);
+    }
+}
