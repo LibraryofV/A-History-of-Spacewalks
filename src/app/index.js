@@ -1,8 +1,15 @@
 import Button from './Button'
 import HttpClient from './httpClient'
-import React from 'react';
-import {render} from 'react-dom';
+import R from 'ramda'
+import React from 'react'
+import {render} from 'react-dom'
 import List from './List'
+import {
+  ALL,
+  BASE_URL,
+  RUSSIA,
+  USA,
+} from './apiConstants'
 
 const styles = {
   switchCountryRow: {
@@ -11,7 +18,7 @@ const styles = {
   },
   buttonText: {
     color: '#FFFFFF',
-    fontFamily: 'calibri',
+    fontFamily: 'calibri, sans-serif',
     fontSize: 16,
     paddingLeft: 12,
     paddingRight: 12,
@@ -23,31 +30,23 @@ const styles = {
   }
 }
 
-const getCorrectApiUrl = (data) => {
-  if(data.first) {
-    return 'https://data.nasa.gov/resource/q8u9-7uq7.json'
-  } else if (data.second){
-    return 'https://data.nasa.gov/resource/q8u9-7uq7.json?country=USA'
-  }
-
-  return 'https://data.nasa.gov/resource/q8u9-7uq7.json?country=Russia'
-}
+const getCorrectApiUrl = R.cond([
+  [R.equals(ALL),   R.always(BASE_URL)],
+  [R.equals(USA), R.always(BASE_URL + '?country=USA')],
+  [R.equals(RUSSIA), R.always(BASE_URL + '?country=Russia')],
+]);
 
 const makeRequest = (self) => {
     const request = new HttpClient();
     request.get(self.state.requestURL, (response) => {
-        self.setState({
-          message: JSON.parse(response)
-        })
+        self.setState({message: JSON.parse(response)})
     });
 }
 
 const selectCountryButtonPress = (self, updatedSelection) => {
-    const newRequest = getCorrectApiUrl(updatedSelection)
-
     self.setState({
       selected: updatedSelection,
-      requestURL: newRequest,
+      requestURL: getCorrectApiUrl(updatedSelection),
     })
 
     const request = new HttpClient();
@@ -64,13 +63,13 @@ class App extends React.Component {
 
         this.state = {
             message: '',
-            selected: {first: true, second: false, third: false},
+            selected: ALL,
         };
     }
 
     componentDidMount() {
         const request = new HttpClient();
-        request.get('https://data.nasa.gov/resource/q8u9-7uq7.json', (response) => {
+        request.get(BASE_URL, (response) => {
             this.setState({
               message: JSON.parse(response)
             })
@@ -88,18 +87,18 @@ class App extends React.Component {
                       </div>
                       <div style={styles.switchCountryRow}>
                           <Button
-                              onClick={() => selectCountryButtonPress(this, {first: true, second: false, third: false})}
-                              selected={this.state.selected.first}>
+                              onClick={() => selectCountryButtonPress(this, ALL)}
+                              selected={this.state.selected === ALL}>
                                   <p style={styles.buttonText}>Both</p>
                           </Button>
                           <Button
-                              onClick={() => selectCountryButtonPress(this, {first: false, second: true, third: false})}
-                              selected={this.state.selected.second}>
+                              onClick={() => selectCountryButtonPress(this, USA)}
+                              selected={this.state.selected === USA}>
                                   <p style={styles.buttonText}>USA</p>
                           </Button>
                           <Button
-                              onClick={() => selectCountryButtonPress(this, {first: false, second: false, third: true})}
-                              selected={this.state.selected.third}>
+                              onClick={() => selectCountryButtonPress(this, RUSSIA)}
+                              selected={this.state.selected === RUSSIA}>
                                   <p style={styles.buttonText}>Russia</p>
                           </Button>
                       </div>

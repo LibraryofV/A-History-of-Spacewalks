@@ -1,4 +1,4 @@
-const HttpClient = function() {
+export default function() {
     this.get = (url, onRequestComplete) => {
         const request = new XMLHttpRequest();
         request.onreadystatechange = () => {
@@ -10,5 +10,3 @@ const HttpClient = function() {
         request.send(null);
     }
 }
-
-export default HttpClient

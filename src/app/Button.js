@@ -20,12 +20,10 @@ const styles = {
   }
 }
 
-const Button = ({children, onClick, selected}) => (
+export default ({children, onClick, selected}) => (
   <div
     onClick={selected ? null : onClick}
     style={selected ? styles.selectedButton : styles.button}>
       {children}
   </div>
 )
-
-export default Button
