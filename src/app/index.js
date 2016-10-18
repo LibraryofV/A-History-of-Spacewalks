@@ -44,12 +44,14 @@ const makeRequest = (self) => {
 }
 
 const selectCountryButtonPress = (self, updatedSelection) => {
+    const newRequest = getCorrectApiUrl(updatedSelection)
+    const request = new HttpClient();
+
     self.setState({
       selected: updatedSelection,
-      requestURL: getCorrectApiUrl(updatedSelection),
+      requestURL: newRequest,
     })
 
-    const request = new HttpClient();
     request.get(newRequest, (response) => {
         self.setState({
           message: JSON.parse(response)
@@ -78,8 +80,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-              {
+            <div> {
                 typeof(this.state.message) === 'object' ?
                     <div>
                       <div style={styles.countRow}>
@@ -105,8 +106,7 @@ class App extends React.Component {
                       <List rowData={this.state.message}/>
                     </div>
                     :null
-              }
-            </div>
+              } </div>
         )
     }
 }
