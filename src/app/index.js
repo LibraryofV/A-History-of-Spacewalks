@@ -25,6 +25,7 @@ const styles = {
   },
   countRow: {
     backgroundColor: '#888',
+    border-bottom: '1px solid #FFF'
     marginBottom: 0,
     height: 20,
   }
